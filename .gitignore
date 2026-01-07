@@ -1,0 +1,29 @@
+# Byte-compiled / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Environment files
+.env
+*.env
+
+# VSCode / IDE settings
+.vscode/
+.idea/
+
+# Data files (optional: if your raw/processed data is large)
+data/raw/
+data/processed/
+
+# Model files (optional: if large and can be recreated)
+models/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
