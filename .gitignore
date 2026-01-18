@@ -18,9 +18,6 @@ __pycache__/
 data/raw/
 data/processed/
 
-# Model files (optional: if large and can be recreated)
-models/
-
 # Logs
 *.log
 
