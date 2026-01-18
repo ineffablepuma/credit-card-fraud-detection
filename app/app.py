@@ -17,17 +17,30 @@ st.set_page_config(
 def load_model_and_scaler():
     # Try multiple possible paths for the model and scaler
     possible_paths = [
+        ('../models', '../models'),  # If app.py is in app/ folder (Streamlit Cloud)
         ('models', 'models'),  # If run from root
-        ('../models', '../models'),  # If run from app folder
         ('.', '.'),  # If files are in same directory
+        ('./models', './models'),  # Explicit relative path
     ]
     
     model = None
     scaler = None
     
+    # Debug: Show current working directory
+    st.info(f"🔍 Searching for model files. Current directory: {os.getcwd()}")
+    st.info(f"📂 Directory contents: {os.listdir('.')}")
+    
+    # Check if models folder exists
+    if os.path.exists('../models'):
+        st.info(f"✅ Found '../models' directory. Contents: {os.listdir('../models')}")
+    if os.path.exists('models'):
+        st.info(f"✅ Found 'models' directory. Contents: {os.listdir('models')}")
+    
     for model_dir, scaler_dir in possible_paths:
         model_path = os.path.join(model_dir, 'random_forest_model.pkl')
         scaler_path = os.path.join(scaler_dir, 'scaler.pkl')
+        
+        st.info(f"🔍 Trying path: {model_path}")
         
         if os.path.exists(model_path):
             try:
@@ -44,7 +57,8 @@ def load_model_and_scaler():
                     st.warning("Predictions may be inaccurate without the scaler!")
                 
                 return model, scaler
-            except:
+            except Exception as e:
+                st.error(f"❌ Error loading with joblib: {str(e)}")
                 # Fallback to pickle if joblib fails
                 try:
                     with open(model_path, 'rb') as file:
@@ -59,8 +73,8 @@ def load_model_and_scaler():
                         st.warning(f"⚠️ Scaler not found at: {scaler_path}")
                     
                     return model, scaler
-                except Exception as e:
-                    st.error(f"Error loading files: {str(e)}")
+                except Exception as e2:
+                    st.error(f"❌ Error loading with pickle: {str(e2)}")
                     continue
     
     st.error("❌ Model file not found. Please ensure 'random_forest_model.pkl' is in the 'models' folder.")
