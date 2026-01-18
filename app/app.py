@@ -26,21 +26,10 @@ def load_model_and_scaler():
     model = None
     scaler = None
     
-    # Debug: Show current working directory
-    st.info(f"🔍 Searching for model files. Current directory: {os.getcwd()}")
-    st.info(f"📂 Directory contents: {os.listdir('.')}")
-    
-    # Check if models folder exists
-    if os.path.exists('../models'):
-        st.info(f"✅ Found '../models' directory. Contents: {os.listdir('../models')}")
-    if os.path.exists('models'):
-        st.info(f"✅ Found 'models' directory. Contents: {os.listdir('models')}")
-    
     for model_dir, scaler_dir in possible_paths:
         model_path = os.path.join(model_dir, 'random_forest_model.pkl')
         scaler_path = os.path.join(scaler_dir, 'scaler.pkl')
         
-        st.info(f"🔍 Trying path: {model_path}")
         
         if os.path.exists(model_path):
             try:
