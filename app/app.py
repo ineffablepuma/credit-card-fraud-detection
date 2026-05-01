@@ -26,34 +26,19 @@ def load_model_and_scaler():
     model = None
     scaler = None
     
-    # Debug: Show current working directory
-    st.info(f"🔍 Searching for model files. Current directory: {os.getcwd()}")
-    st.info(f"📂 Directory contents: {os.listdir('.')}")
-    
-    # Check if models folder exists
-    if os.path.exists('../models'):
-        st.info(f"✅ Found '../models' directory. Contents: {os.listdir('../models')}")
-    if os.path.exists('models'):
-        st.info(f"✅ Found 'models' directory. Contents: {os.listdir('models')}")
-    
     for model_dir, scaler_dir in possible_paths:
         model_path = os.path.join(model_dir, 'random_forest_model.pkl')
         scaler_path = os.path.join(scaler_dir, 'scaler.pkl')
-        
-        st.info(f"🔍 Trying path: {model_path}")
-        
+
         if os.path.exists(model_path):
             try:
                 # Try loading with joblib first (recommended for sklearn)
                 model = joblib.load(model_path)
-                st.success(f"✅ Model loaded successfully from: {model_path}")
                 
                 # Try to load scaler
                 if os.path.exists(scaler_path):
                     scaler = joblib.load(scaler_path)
-                    st.success(f"✅ Scaler loaded successfully from: {scaler_path}")
                 else:
-                    st.warning(f"⚠️ Scaler not found at: {scaler_path}")
                     st.warning("Predictions may be inaccurate without the scaler!")
                 
                 return model, scaler
@@ -63,14 +48,11 @@ def load_model_and_scaler():
                 try:
                     with open(model_path, 'rb') as file:
                         model = pickle.load(file)
-                    st.success(f"✅ Model loaded successfully from: {model_path}")
-                    
+               
                     if os.path.exists(scaler_path):
                         with open(scaler_path, 'rb') as file:
                             scaler = pickle.load(file)
-                        st.success(f"✅ Scaler loaded successfully from: {scaler_path}")
                     else:
-                        st.warning(f"⚠️ Scaler not found at: {scaler_path}")
                     
                     return model, scaler
                 except Exception as e2:
@@ -80,7 +62,6 @@ def load_model_and_scaler():
     st.error("❌ Model file not found. Please ensure 'random_forest_model.pkl' is in the 'models' folder.")
     st.error("❌ Scaler file not found. Please ensure 'scaler.pkl' is in the 'models' folder.")
     st.info(f"📁 Current working directory: {os.getcwd()}")
-    st.info("💡 Tip: Run 'streamlit run app.py' from the project root directory")
     return None, None
 
 model, scaler = load_model_and_scaler()
