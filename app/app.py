@@ -53,6 +53,7 @@ def load_model_and_scaler():
                         with open(scaler_path, 'rb') as file:
                             scaler = pickle.load(file)
                     else:
+                        st.warning(f"⚠️ Scaler not found at: {scaler_path}")
                     
                     return model, scaler
                 except Exception as e2:
